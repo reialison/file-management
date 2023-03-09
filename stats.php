@@ -283,40 +283,174 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != true) {
             <div class="clear"></div>
             <br>
 
-            <div class="topFiles">
-                <h2>Most Popular Files</h2>
-                <div class="clear"></div>
-				<?php
-				$sql = "SELECT d.idFile,f.*,(SELECT COUNT(id) FROM  {$db_pr}downloads WHERE idFile=d.idFile) as total FROM {$db_pr}downloads d
-                        INNER JOIN {$db_pr}files f ON f.id=d.idFile
-                        group BY d.idFile ORDER BY total DESC LIMIT 10";
-				$res = mysqli_query($mysqli,$sql);
-				if (mysqli_num_rows($res)) {
-					?>
-                    <table class="stat">
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>File</th>
-                            <th class="text-center">Downloads Count</th>
-                        </tr>
-						<?php    $i = 1;
-						while ($row = mysqli_fetch_assoc($res)) {
-							?>
-                            <tr class="<?php echo ($i % 2) ? "odd" : "" ?>">
-                                <td><?php echo $i ?>.</td>
-                                <td><?php echo($row['title']) ?></td>
-                                <td class="text-center"><?php echo($row['total']) ?> Downloads</td>
-                            </tr>
-							<?php $i++;
-						} ?>
-                    </table>
-				<?php } else { ?>
-                    <td colspan="3">No data</td>
-				<?php } ?>
+            <div class="topFiles row">
+            	<div class="col-6">
+	                <h2>Most Popular Files</h2>
+	                <div class="clear"></div>
+					<?php
+					$sql = "SELECT d.idFile,f.*,(SELECT COUNT(id) FROM  {$db_pr}downloads WHERE idFile=d.idFile) as total FROM {$db_pr}downloads d
+	                        INNER JOIN {$db_pr}files f ON f.id=d.idFile
+	                        group BY d.idFile ORDER BY total DESC LIMIT 10";
+					$res = mysqli_query($mysqli,$sql);
+					if (mysqli_num_rows($res)) {
+						?>
+	                    <table class="stat">
+	                        <tr>
+	                            <th>&nbsp;</th>
+	                            <th>File</th>
+	                            <th class="text-center">Downloads Count</th>
+	                        </tr>
+							<?php    $i = 1;
+							while ($row = mysqli_fetch_assoc($res)) {
+								?>
+	                            <tr class="<?php echo ($i % 2) ? "odd" : "" ?>">
+	                                <td><?php echo $i ?>.</td>
+	                                <td><?php echo($row['title']) ?></td>
+	                                <td class="text-center"><?php echo($row['total']) ?> Downloads</td>
+	                            </tr>
+								<?php $i++;
+							} ?>
+	                    </table>
+					<?php } else { ?>
+	                    <td colspan="3">No data</td>
+					<?php } ?>
+            	</div>
+            	<div class="col-6">
+	            	<h2>Content Per Folder</h2>
+	                <div class="clear"></div>
+	                <div class="col-6-right">
+					  <canvas id="myChart"></canvas>
+					</div>
+					<?php
+					$sql = "SELECT name FROM {$db_pr}folders WHERE parentID=0";
+					$res = mysqli_query($mysqli,$sql);
+					if (mysqli_num_rows($res)) {
+						// echo print_r($res);die();
+						?>
+							<?php    //$i = 1;
+							while ($row = mysqli_fetch_all($res)) {
+								// echo "<pre>",print_r($row),"</pre>";die();
+								?>
+								<?php //$i++;
+							} ?>
+					<?php } else { ?>
+	                    <!-- <td colspan="3">No data</td> -->
+					<?php } ?>
+
+					<?php
+					/*$sql2 = "SELECT count(*) as parent_count,name FROM {$db_pr}folders 
+							 INNER JOIN  {$db_pr}files on {$db_pr}files.catID =  {$db_pr}folders.id 
+
+					 WHERE parentID!=0 group by  {$db_pr}folders.id";*/
+					 $sql2 = "select sum(parent_count),name from (
+																									
+					SELECT count(*) as parent_count,name FROM afm_folders 
+							 INNER JOIN  afm_files on afm_files.catID =  afm_folders.id && afm_folders.parentID = 0
+					
+					  group by  afm_folders.id
+
+					UNION ALL
+
+					SELECT count(*) as parent_count,name FROM afm_folders 
+					INNER JOIN (select parentID from afm_files inner join afm_folders on afm_files.catID =  afm_folders.id && afm_folders.parentID !=0) files
+					ON files.parentID = afm_folders.id
+					  group by  afm_folders.id
+
+)tbl group by name";
+					
+					// echo $sql2;die();
+					$res2 = mysqli_query($mysqli,$sql2);
+					if (mysqli_num_rows($res2)) {
+						// echo print_r($res);die();
+						?>
+							<?php    //$i = 1;
+							while ($row2 = mysqli_fetch_all($res2)) {
+								foreach ($row2 as $key) {
+									$data[] =$key[0];
+									$data1[] = $key[1];
+									# code...
+								}
+								 $datas = array('count'=>$data,'name'=>$data1);
+								// echo "<pre>",print_r($data),"</pre>";die();
+								?>
+								<?php //$i++;
+							} ?>
+					<?php } else { ?>
+	                    <!-- <td colspan="3">No data</td> -->
+					<?php } ?>
+				</div>
             </div>
+            <br>
+            <br>
+            <br>
         </div>
+
     </div>
     </div>
     </div>
+    <script src="js/chart.js"></script>
+
+	<script>
+	  const ctx = document.getElementById('myChart');
+	  obj = <?=json_encode($datas) ?>;
+	  // t = JSON.parse(obj);
+	  // console.log(obj.name);
+
+	    data2 = {
+  "Dates" : [
+    "2021-08-02",
+    "2021-08-03",
+    "2021-08-04",
+    "2021-08-05",
+    "2021-08-06"
+  ],
+  "Users": [
+    6,
+    4,
+    3,
+    8,
+    2
+  ]
+};
+
+	  new Chart(ctx, {
+	    type: 'pie',
+	    // data: {
+	    //   datasets: [{
+	    //     // label: t.name,
+	    //     data:   data2.Users,
+	    //     // labels: ['Red', 'Blue'],
+	    //     // data: t.count,
+	    //     // data: data2.Users,
+	    //     // data: [obj],
+	    //     borderWidth: 1
+	    //   }]
+	    // },
+
+	    data: {
+		    labels: obj.name,
+		datasets: [{
+		  // backgroundColor: barColors,
+		  data: obj.count
+		}]
+		},
+		plugins: {
+            legend: {
+                display: false
+            },
+            tooltips: {
+            enabled: false
+         	},
+        },
+	    options: {
+         legend: {
+            display: false
+         },
+         tooltips: {
+            enabled: false
+         }
+    }
+	  });
+	</script>
 	<?php include "includes/footer.php";
 } ?>

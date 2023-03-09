@@ -1,0 +1,9 @@
+trans_sales
+ 	queue_id 
+ 	queue_print
+
+
+ALTER TABLE `trans_sales`
+ADD COLUMN `queue_id` int(11) NULL AFTER `sync_id`;
+ALTER TABLE `trans_sales`
+ADD COLUMN `queue_print` int(11) NULL AFTER `queue_id `;

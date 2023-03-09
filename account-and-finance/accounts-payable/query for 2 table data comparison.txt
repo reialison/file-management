@@ -1,0 +1,5 @@
+SELECT trans_sales_b.sales_id, trans_sales_b.update_date
+FROM trans_sales_b
+LEFT OUTER JOIN trans_sales
+ON trans_sales.sales_id = trans_sales_b.sales_id
+WHERE trans_sales_b.terminal_id = 1 && trans_sales_b.trans_ref is NULL && trans_sales.update_date != trans_sales_b.update_date

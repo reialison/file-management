@@ -432,3 +432,9 @@ h1.header_install {
 
 .install-form p, .login p { font-size: 14px;}
 .demoWarning { text-align: center; font-weight: bold; max-width: 300px; width: 300px; margin: 0 auto;}
+
+#content-main{
+    height: 800px;
+}
+.col-6{width:50%;float:left;}
+.col-6-right{width:80%;float:right;}
