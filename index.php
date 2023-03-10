@@ -121,7 +121,7 @@ include "includes/header_static.php";
             </div>
             <div class="form-group">
                 <div class="col-sm-12">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="background-color:#53585c">Sign in</button>
                 </div>
             </div>
         </form>
