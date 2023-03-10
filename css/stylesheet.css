@@ -41,6 +41,7 @@ form label {
   float: left;
   font: bold 38px Arial;
   margin: 15px 0;
+  padding-left: 30px;
   text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.27);
 }
 #header h1 a {
@@ -51,7 +52,7 @@ form label {
   float: right;
   font: bold 14px Arial, Helvetica, sans-serif;
   color: #fff;
-  padding: 35px 0 0 0;
+  padding: 35px 28px 0 0;
 }
 #header span a {
   color: #fff;
