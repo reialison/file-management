@@ -892,3 +892,7 @@ h1.header_install {
 }
 .col-6{width:50%;float:left;}
 .col-6-right{width:80%;float:right;}
+#myChart{
+    width:250px!important;
+    height: 250px!important;
+}
