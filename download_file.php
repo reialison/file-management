@@ -183,7 +183,7 @@ $required = mysqli_fetch_assoc(mysqli_query($mysqli,"SELECT require_login_downlo
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                            <button type="submit" class="btn btn-dark btn-block" style="background-color:#53585c">Sign in</button>
                         </div>
                     </div>
                 </form>
