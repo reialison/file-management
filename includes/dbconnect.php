@@ -8,7 +8,7 @@
                 $db_host = 'localhost'; //hostname
                 $db_user = 'root'; // username
                 $db_password = ''; // password
-                $db_name = 'dsm1'; //database name
+                $db_name = 'dms1'; //database name
 
                 $db_pr = 'afm_'; //database prefix
 
